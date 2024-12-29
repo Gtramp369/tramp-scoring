@@ -3,6 +3,7 @@
     import * as Card from "$lib/components/ui/card";
     import * as Button from "$lib/components/ui/button";
     import { Checkbox } from "$lib/components/ui/checkbox/index.js";
+    import { Input } from "$lib/components/ui/input/index.js";
     
     let selected = { value: 0, label: "" };
     
@@ -13,17 +14,7 @@
       { value: 4, label: "4 Tricks" },
       { value: 5, label: "5 Tricks" },
     ];
-    
-    const flipsOptions = Array.from({ length: 10 }, (_, i) => ({
-      value: i,
-      label: `${i} Flip${i === 1 ? "" : "s"}`,
-    }));
-    
-    const twistsOptions = Array.from({ length: 10 }, (_, i) => ({
-      value: i,
-      label: `${i} Twist${i === 1 ? "" : "s"}`,
-    }));
-    
+
     const transitionOptions = [
       { value: 0.15, label: "back feet" },
       { value: 0.3, label: "front feet" },
@@ -48,8 +39,8 @@
     ];
     
     interface Trick {
-      flips: { value: number; label: string };
-      twists: { value: number; label: string };
+      flips: number;
+      twists: number;
       transition: { value: number; label: string };
       landed: boolean;
     }
@@ -59,8 +50,8 @@
     $: if (selected.value > 0) {
       // Update the tricks array to match the selected number of tricks
       tricks = Array.from({ length: selected.value }, (_, i) => ({
-        flips: { value: 0, label: "0 Flips" },
-        twists: { value: 0, label: "0 Twists" },
+        flips: 0,
+        twists: 0,
         transition: { value: 0, label: "None" },
         landed: false, // Add 'landed' property to each trick
       }));
@@ -81,8 +72,8 @@
       totalScore = 0; // Reset total score before calculating
     
       tricks.forEach((trick, index) => {
-        const flips = trick.flips.value;
-        const twists = trick.twists.value;
+        const flips = trick.flips;
+        const twists = trick.twists;
         const transition = transitionOptionsWithNone.find(t => t.label === trick.transition.label); // Correctly find transition
         let score = calculateScore(flips, twists);
     
@@ -143,10 +134,10 @@
       </Select.Root>
     </div>
   
-    <p class="text-center mt-4">Selected combo length: {selected.value}</p>
+    <p class="text-center my-5">Selected combo length: {selected.value}</p>
   
     <!-- Generate cards dynamically based on the selected number of tricks -->
-    <div class="flex flex-wrap justify-center gap-4 mt-10">
+    <div class="flex flex-wrap justify-center gap-4">
       {#each tricks as trick, index}
         <Card.Root class="p-5 shadow-md w-full sm:w-[300px] lg:w-[450px]">
           <Card.Header>
@@ -154,34 +145,12 @@
           </Card.Header>
           <Card.Content class="flex flex-col gap-6">
             <div>
-              <Select.Root bind:selected={trick.flips} on:open={e => isSelectOpen = true} on:close={e => isSelectOpen = false}>
                 <p class="mb-1">Number of flips</p>
-                <Select.Trigger>
-                  <Select.Value placeholder="Select number of flips" />
-                </Select.Trigger>
-                <Select.Content class="max-h-60 overflow-y-auto"> <!-- Added max-height and overflow handling -->
-                  <Select.Group>
-                    {#each flipsOptions as flip}
-                      <Select.Item value={flip.value} label={flip.label}>{flip.label}</Select.Item>
-                    {/each}
-                  </Select.Group>
-                </Select.Content>
-              </Select.Root>
+                <Input type="number" placeholder="Number of flips" bind:value={trick.flips} />
             </div>
             <div>
-              <Select.Root bind:selected={trick.twists} on:open={e => isSelectOpen = true} on:close={e => isSelectOpen = false}>
                 <p class="mb-1">Number of twists</p>
-                <Select.Trigger>
-                  <Select.Value placeholder="Select number of twists" />
-                </Select.Trigger>
-                <Select.Content class="max-h-60 overflow-y-auto"> <!-- Added max-height and overflow handling -->
-                  <Select.Group>
-                    {#each twistsOptions as twist}
-                      <Select.Item value={twist.value} label={twist.label}>{twist.label}</Select.Item>
-                    {/each}
-                  </Select.Group>
-                </Select.Content>
-              </Select.Root>
+                <Input type="number" placeholder="Number of twists" bind:value={trick.twists} />
             </div>
   
             {#if index === tricks.length - 1}
@@ -194,12 +163,12 @@
               </div>
             {:else}
               <div>
-                <Select.Root bind:selected={trick.transition} on:open={e => isSelectOpen = true} on:close={e => isSelectOpen = false}>
+                <Select.Root bind:selected={trick.transition} preventScroll={false}>
                   <p class="mb-1">Transition</p>
                   <Select.Trigger>
                     <Select.Value placeholder="Select a transition" />
                   </Select.Trigger>
-                  <Select.Content class="max-h-60 overflow-y-auto"> <!-- Added max-height and overflow handling -->
+                  <Select.Content>
                     <Select.Group>
                       {#each uniqueTransitionOptions as transition}
                         <Select.Item value={transition.uniqueValue} label={transition.label}>{transition.label}</Select.Item>
