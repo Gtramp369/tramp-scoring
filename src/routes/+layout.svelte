@@ -6,5 +6,5 @@
 
 </script>
 
-<ModeWatcher defaultMode='dark' />
+<ModeWatcher defaultMode='system' />
 {@render children()}
