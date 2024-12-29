@@ -39,8 +39,8 @@
     ];
     
     interface Trick {
-      flips: number;
-      twists: number;
+      flips: number | undefined;
+      twists: number | undefined;
       transition: { value: number; label: string };
       landed: boolean;
     }
@@ -50,8 +50,8 @@
     $: if (selected.value > 0) {
       // Update the tricks array to match the selected number of tricks
       tricks = Array.from({ length: selected.value }, (_, i) => ({
-        flips: 0,
-        twists: 0,
+        flips: undefined,
+        twists: undefined,
         transition: { value: 0, label: "None" },
         landed: false, // Add 'landed' property to each trick
       }));
@@ -65,9 +65,16 @@
     }
     
     function calculateScore() {
-      const calculateScore = (flips: number, twists: number) => {
-        return 0.04 * (3 * Math.pow(flips, 1.5) + 2 * Math.pow(twists + 0.2 * flips, 1.5));
-      };
+        const calculateScore = (flips: number | undefined, twists: number | undefined) => {
+            if (flips === undefined) {
+                flips = 0
+            }
+            if (twists === undefined) {
+                twists = 0
+            }
+            return 0.04 * (3 * Math.pow(flips, 1.5) + 2 * Math.pow(twists + 0.2 * flips, 1.5));
+        };
+
     
       totalScore = 0; // Reset total score before calculating
     
