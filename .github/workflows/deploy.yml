@@ -18,9 +18,9 @@ jobs:
       #     version: 8
 
       - name: Install Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
- node-version: 18
+ node-version: 20
  cache: npm
 
       - name: Install dependencies
@@ -28,7 +28,7 @@ jobs:
 
       - name: build
         env:
- BASE_PATH: '/${{ github.event.repository.name }}'
+ BASE_PATH: 'tramp-scoring'
         run: |
  npm run build
 
