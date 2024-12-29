@@ -108,12 +108,15 @@
     // Track if a select is open
     let isSelectOpen = false;
     
-    // Update scroll behavior based on select state
+    // Update scroll behavior based on select state (only runs on client-side)
     $: {
-      if (isSelectOpen) {
-        document.body.style.overflow = "auto"; // Enable body scroll when select is open
-      } else {
-        document.body.style.overflow = ""; // Reset body scroll when select is closed
+      if (typeof window !== "undefined") {
+        // Ensure this code runs only on the client
+        if (isSelectOpen) {
+          document.body.style.overflow = "auto"; // Enable body scroll when select is open
+        } else {
+          document.body.style.overflow = ""; // Reset body scroll when select is closed
+        }
       }
     }
   </script>
