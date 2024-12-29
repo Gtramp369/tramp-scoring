@@ -4,7 +4,8 @@
     import * as Button from "$lib/components/ui/button";
     import { Checkbox } from "$lib/components/ui/checkbox/index.js";
     import { Input } from "$lib/components/ui/input/index.js";
-	import Footer from "$lib/components/Footer.svelte";
+    import {Sun, Moon, GithubLogo} from "svelte-radix";
+    import { toggleMode } from "mode-watcher";
     
     let selected = { value: 0, label: "" };
     
@@ -60,11 +61,6 @@
     
     let totalScore = 0; // Track the total score
     
-    function changeSelected() {
-      console.log(selected);
-      console.log(tricks);
-    }
-    
     function calculateScore() {
         const calculateScore = (flips: number | undefined, twists: number | undefined) => {
             if (flips === undefined) {
@@ -93,9 +89,7 @@
         }
     
         totalScore += score;
-        console.log(`Trick ${index + 1} score: ${score}`);
       });
-      console.log(`Total Score: ${totalScore}`);
     }
     
     // Append unique identifiers to each value
@@ -122,9 +116,8 @@
   
   <div class="mx-5">
     <h1 class="text-center text-5xl mt-20 italic">World champs scoring system</h1>
-  
     <div class="mx-auto flex justify-center mt-10">
-      <Select.Root onSelectedChange={changeSelected} bind:selected={selected} on:open={e => isSelectOpen = true} on:close={e => isSelectOpen = false}>
+      <Select.Root bind:selected={selected} on:open={e => isSelectOpen = true} on:close={e => isSelectOpen = false}>
         <div class="flex flex-col justify-center">
           <Select.Label class="text-center text-lg">Number of tricks in the combo (1-5)</Select.Label>
           <Select.Trigger>
@@ -194,7 +187,26 @@
     <div class="flex justify-center my-5">
       <Button.Root on:click={calculateScore} class="px-5 bg-sky-600 hover:bg-sky-400 transition duration-200">Calculate Score</Button.Root>
     </div>
-    <p class="text-center text-xl mt-5 mb-20">Total Score: {totalScore}</p>
+    <p class="text-center text-xl mt-5 mb-10">Total Score: {totalScore}</p>
+    <p class="text-center text-xl italic">Current formula for each trick:</p>
+    <p class="text-center mb-10">Score = 0.04 × (3(flips^1.5) + 2((twists+0.2×flips)^1.5)) + transition bonus</p>
   
   </div>
-<Footer />
+  <div class="mx-auto flex justify-center gap-10">
+
+    <Button.Root on:click={toggleMode} variant="outline" size="icon" class="rounded-full">
+      <Sun
+        class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"
+      />
+      <Moon
+        class="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
+      />
+      <span class="sr-only">Toggle theme</span>
+    </Button.Root>
+    <a href="https://github.com/Gtramp369/tramp-scoring" target="_blank">
+     <div class="flex-col hover:text-purple-500 transition duration-200">
+         <GithubLogo class="mx-auto" />
+         <p>Code</p>
+  </div>
+ </a>
+</div>
