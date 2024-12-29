@@ -7,7 +7,7 @@
     import {Sun, Moon, GithubLogo} from "svelte-radix";
     import { toggleMode } from "mode-watcher";
     
-    let selected = { value: 0, label: "" };
+    let selected = { value: 1, label: "1 Trick" };
     
     const comboLength = [
       { value: 1, label: "1 Trick" },
@@ -18,26 +18,20 @@
     ];
 
     const transitionOptions = [
-      { value: 0.15, label: "back feet" },
-      { value: 0.3, label: "front feet" },
-      { value: 0.1, label: "back cody" },
-      { value: 0.3, label: "front cody" },
-      { value: 0, label: "back kaboom" },
-      { value: 0.2, label: "front kaboom" },
-      { value: 0, label: "back pullover" },
-      { value: 0.4, label: "front pullover" },
-      { value: 0.1, label: "front ballout" },
-      { value: 0.2, label: "back ballout" },
-      { value: 0.0, label: "front benny" },
-      { value: 0.35, label: "back benny" },
-      { value: 0.25, label: "front zach" },
-      { value: 0.4, label: "back zach" },
-    ];
-    
-    // Add a "None" option with value 0 for transitions
-    const transitionOptionsWithNone = [
-      { value: 0, label: "None" },
-      ...transitionOptions
+      { value: 0.15, label: "back feet + 0.15" },
+      { value: 0.3, label: "front feet + 0.3" },
+      { value: 0.1, label: "back cody + 0.1" },
+      { value: 0.3, label: "front cody + 0.3" },
+      { value: 0.0, label: "back kaboom + 0.0" },
+      { value: 0.2, label: "front kaboom + 0.2" },
+      { value: 0.0, label: "back pullover + 0" },
+      { value: 0.4, label: "front pullover + 0.4" },
+      { value: 0.1, label: "front ballout + 0.1" },
+      { value: 0.2, label: "back ballout + 0.2" },
+      { value: 0.0, label: "front benny + 0.0" },
+      { value: 0.35, label: "back benny + 0.35" },
+      { value: 0.25, label: "front zach + 0.25" },
+      { value: 0.4, label: "back zach + 0.4" },
     ];
     
     interface Trick {
@@ -62,7 +56,8 @@
     let totalScore = 0; // Track the total score
     
     function calculateScore() {
-        const calculateScore = (flips: number | undefined, twists: number | undefined) => {
+
+        const calculateScoreForTrick = (flips: number | undefined, twists: number | undefined) => {
             if (flips === undefined) {
                 flips = 0
             }
@@ -78,14 +73,14 @@
       tricks.forEach((trick, index) => {
         const flips = trick.flips;
         const twists = trick.twists;
-        const transition = transitionOptionsWithNone.find(t => t.label === trick.transition.label); // Correctly find transition
-        let score = calculateScore(flips, twists);
+        const transition = transitionOptions.find(t => t.label === trick.transition.label); // Find transition
+        let score = calculateScoreForTrick(flips, twists);
     
         // If it's the last trick, add the landed bonus
         if (index === tricks.length - 1) {
           score += trick.landed ? 0.1 : 0;
         } else if (transition) {
-          score += transition.value; // Correctly apply the transition value
+          score += transition.value; // Apply the transition value
         }
     
         totalScore += score;
@@ -98,32 +93,18 @@
       uniqueValue: `${transition.value}-${index}`, // Append index to make each value unique
     }));
     
-    // Track if a select is open
-    let isSelectOpen = false;
-    
-    // Update scroll behavior based on select state (only runs on client-side)
-    $: {
-      if (typeof window !== "undefined") {
-        // Ensure this code runs only on the client
-        if (isSelectOpen) {
-          document.body.style.overflow = "auto"; // Enable body scroll when select is open
-        } else {
-          document.body.style.overflow = ""; // Reset body scroll when select is closed
-        }
-      }
-    }
   </script>
   
   <div class="mx-5">
-    <h1 class="text-center text-5xl mt-20 italic">World champs scoring system</h1>
-    <div class="mx-auto flex justify-center mt-10">
-      <Select.Root bind:selected={selected} on:open={e => isSelectOpen = true} on:close={e => isSelectOpen = false}>
+    <h1 class="text-center text-5xl mt-10 italic">Difficulty calculator</h1>
+    <div class="mx-auto flex justify-center my-10">
+      <Select.Root bind:selected={selected}>
         <div class="flex flex-col justify-center">
           <Select.Label class="text-center text-lg">Number of tricks in the combo (1-5)</Select.Label>
           <Select.Trigger>
             <Select.Value placeholder="Select a combo length" />
           </Select.Trigger>
-          <Select.Content class="max-h-60 overflow-y-auto"> <!-- Added max-height and overflow handling -->
+          <Select.Content>
             <Select.Group>
               {#each comboLength as length}
                 <Select.Item value={length.value} label={length.label}>{length.label}</Select.Item>
@@ -135,10 +116,9 @@
       </Select.Root>
     </div>
   
-    <p class="text-center my-5">Selected combo length: {selected.value}</p>
   
     <!-- Generate cards dynamically based on the selected number of tricks -->
-    <div class="flex flex-wrap justify-center gap-4">
+    <div class="flex flex-wrap justify-center gap-5 max-w-screen-2xl mx-auto">
       {#each tricks as trick, index}
         <Card.Root class="p-5 shadow-md w-full sm:w-[300px] lg:w-[450px]">
           <Card.Header>
@@ -187,7 +167,7 @@
     <div class="flex justify-center my-5">
       <Button.Root on:click={calculateScore} class="px-5 bg-sky-600 hover:bg-sky-400 transition duration-200">Calculate Score</Button.Root>
     </div>
-    <p class="text-center text-xl mt-5 mb-10">Total Score: {totalScore}</p>
+    <p class="text-center text-xl my-5">Total Score: {totalScore}</p>
     <p class="text-center text-xl italic">Current formula (Hugo's formula):</p>
     <p class="text-center mb-10">Score = 0.04 × (3(flips^1.5) + 2((twists+0.2×flips)^1.5)) + transition bonus</p>
   
