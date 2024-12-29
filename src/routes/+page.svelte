@@ -192,7 +192,7 @@
     <p class="text-center mb-10">Score = 0.04 × (3(flips^1.5) + 2((twists+0.2×flips)^1.5)) + transition bonus</p>
   
   </div>
-  <div class="mx-auto flex justify-center gap-10">
+  <div class="mx-auto flex justify-center gap-10 mb-20">
 
     <Button.Root on:click={toggleMode} variant="outline" size="icon" class="rounded-full">
       <Sun
