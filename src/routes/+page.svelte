@@ -4,6 +4,7 @@
     import * as Button from "$lib/components/ui/button";
     import { Checkbox } from "$lib/components/ui/checkbox/index.js";
     import { Input } from "$lib/components/ui/input/index.js";
+	import Footer from "$lib/components/Footer.svelte";
     
     let selected = { value: 0, label: "" };
     
@@ -191,9 +192,9 @@
     </div>
   
     <div class="flex justify-center my-5">
-      <Button.Root on:click={calculateScore} class="px-5">Calculate Score</Button.Root>
+      <Button.Root on:click={calculateScore} class="px-5 bg-sky-600 hover:bg-sky-400 transition duration-200">Calculate Score</Button.Root>
     </div>
     <p class="text-center text-xl mt-5 mb-20">Total Score: {totalScore}</p>
   
   </div>
-  
+<Footer />
