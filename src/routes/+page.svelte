@@ -188,7 +188,7 @@
       <Button.Root on:click={calculateScore} class="px-5 bg-sky-600 hover:bg-sky-400 transition duration-200">Calculate Score</Button.Root>
     </div>
     <p class="text-center text-xl mt-5 mb-10">Total Score: {totalScore}</p>
-    <p class="text-center text-xl italic">Current formula for each trick:</p>
+    <p class="text-center text-xl italic">Current formula (the Hugo formula):</p>
     <p class="text-center mb-10">Score = 0.04 × (3(flips^1.5) + 2((twists+0.2×flips)^1.5)) + transition bonus</p>
   
   </div>
