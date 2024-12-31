@@ -4,7 +4,7 @@
     import * as Button from "$lib/components/ui/button";
     import { Checkbox } from "$lib/components/ui/checkbox/index.js";
     import { Input } from "$lib/components/ui/input/index.js";
-    import {Sun, Moon, GithubLogo} from "svelte-radix";
+    import {Sun, Moon, GithubLogo, FileText} from "svelte-radix";
     import { toggleMode } from "mode-watcher";
     
     let selected = { value: 1, label: "1 Trick" };
@@ -165,15 +165,21 @@
     </div>
   
     <div class="flex justify-center my-5">
-      <Button.Root on:click={calculateScore} class="px-5 bg-sky-600 hover:bg-sky-400 transition duration-200">Calculate Score</Button.Root>
+      <Button.Root on:click={calculateScore} class="px-5 bg-sky-500 hover:bg-sky-400 transition duration-200">Calculate Score</Button.Root>
     </div>
     <p class="text-center text-xl my-5">Total Score: {totalScore}</p>
     <p class="text-center text-xl italic">Current formula (Hugo's formula):</p>
     <p class="text-center mb-10">Score = 0.04 × (3(flips^1.5) + 2((twists+0.2×flips)^1.5)) + transition bonus</p>
   
-  </div>
-  <div class="mx-auto flex justify-center gap-10 mb-20">
+</div>
+<div class="mx-auto flex justify-center gap-10 mb-10">
 
+  <a href="https://docs.google.com/document/d/1SBfisKRpiPP05-zKzybTm81-vtoTHm47ktNsRHLu1jU/edit?tab=t.0" target="_blank">
+    <div class="flex-col hover:text-emerald-500 transition duration-200">
+      <FileText class="mx-auto" />
+      <p>Docs</p>
+    </div>
+  </a>
     <Button.Root on:click={toggleMode} variant="outline" size="icon" class="rounded-full">
       <Sun
         class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"
@@ -187,6 +193,8 @@
      <div class="flex-col hover:text-purple-500 transition duration-200">
          <GithubLogo class="mx-auto" />
          <p>Code</p>
-  </div>
- </a>
+      </div>
+    </a>
 </div>
+<p class="text-center mb-10">Made by tflipz</p>
+
